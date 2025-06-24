@@ -1,0 +1,1605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TouchMe - Full Stack Developer Portfolio</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: #000;
+  color: #fff;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* Background Video Container */
+.video-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+}
+
+.video-background video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.6;
+}
+
+.video-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2));
+  z-index: -1;
+}
+
+/* Main Container */
+.main-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Floating Navigation - New Design */
+.navbar {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(17, 24, 39, 0.85);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 50px;
+  z-index: 1000;
+  padding: 12px 20px;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.navbar:hover {
+  background: rgba(17, 24, 39, 0.95);
+  box-shadow: 0 12px 40px rgba(16, 185, 129, 0.2);
+  border-color: rgba(16, 185, 129, 0.5);
+}
+
+.nav-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: bold;
+  color: #10b981;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  margin-right: 15px;
+  padding: 8px 12px;
+}
+
+.logo:hover {
+  color: #a855f7;
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 5px;
+  position: relative;
+}
+
+.nav-links a {
+  color: #e5e7eb;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  padding: 10px 16px;
+  border-radius: 25px;
+  position: relative;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.nav-links a:hover {
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+  transform: translateY(-1px);
+}
+
+.nav-links a.active {
+  color: #fff;
+  background: linear-gradient(135deg, #10b981, #a855f7);
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+/* Mobile Navigation Toggle */
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: #10b981;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.nav-toggle:hover {
+  background: rgba(16, 185, 129, 0.1);
+}
+
+/* Control Panels - Repositioned */
+.control-panels {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  gap: 10px;
+  z-index: 1001;
+}
+
+.music-dropdown, .video-dropdown {
+  position: relative;
+}
+
+.music-button, .video-button {
+  background: linear-gradient(135deg, #10b981, #a855f7);
+  border: none;
+  border-radius: 50px;
+  padding: 12px 20px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+  font-size: 14px;
+  min-width: 100px;
+  justify-content: center;
+}
+
+.video-button {
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+}
+
+.music-button:hover, .video-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+}
+
+.video-button:hover {
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
+}
+
+.music-panel, .video-panel {
+  position: absolute;
+  top: 55px;
+  right: 0;
+  background: rgba(17, 24, 39, 0.95);
+  backdrop-filter: blur(15px);
+  border-radius: 15px;
+  padding: 20px;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  min-width: 280px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+}
+
+.video-panel {
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.music-panel.active, .video-panel.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.music-header, .video-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+  color: #10b981;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.video-header {
+  color: #3b82f6;
+}
+
+.music-options, .video-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.music-option, .video-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.music-option:hover, .video-option:hover {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.video-option:hover {
+  background: rgba(59, 130, 246, 0.1);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.music-option.active {
+  background: rgba(16, 185, 129, 0.2);
+  border-color: #10b981;
+  color: #10b981;
+}
+
+.video-option.active {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: #3b82f6;
+  color: #3b82f6;
+}
+
+.music-option input[type="radio"], .video-option input[type="radio"] {
+  accent-color: #10b981;
+}
+
+.video-option input[type="radio"] {
+  accent-color: #3b82f6;
+}
+
+.music-option label, .video-option label {
+  cursor: pointer;
+  flex: 1;
+  font-size: 14px;
+}
+
+.volume-control, .video-controls {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.video-controls {
+  border-top-color: rgba(59, 130, 246, 0.2);
+}
+
+.volume-label, .opacity-label {
+  font-size: 12px;
+  color: #9ca3af;
+  margin-bottom: 8px;
+}
+
+.volume-slider, .opacity-slider {
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  background: #374151;
+  outline: none;
+  -webkit-appearance: none;
+}
+
+.volume-slider::-webkit-slider-thumb, .opacity-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #10b981;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.3);
+}
+
+.opacity-slider::-webkit-slider-thumb {
+  background: #3b82f6;
+  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.3);
+}
+
+/* Content Container */
+.content-container {
+  border-radius: 20px;
+  margin: 120px auto 50px;
+  padding: 40px;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+}
+
+.home-content {
+  background: rgba(17, 24, 39, 0.2);
+  backdrop-filter: blur(3px);
+}
+
+.other-content {
+  background: rgba(17, 24, 39, 0.8);
+  backdrop-filter: blur(10px);
+}
+
+/* Home Section */
+.home-section {
+  text-align: center;
+  padding: 100px 0;
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.typing-text {
+  font-size: 3.5rem;
+  font-weight: bold;
+  background: linear-gradient(135deg, #10b981, #a855f7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 20px;
+  min-height: 4.5rem;
+  text-shadow: 0 0 30px rgba(16, 185, 129, 0.3);
+}
+
+.cursor {
+  animation: blink 1s infinite;
+  color: #10b981;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.subtitle {
+  font-size: 1.5rem;
+  color: #e5e7eb;
+  margin-bottom: 30px;
+  text-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+}
+
+.scroll-indicator {
+  margin-top: 50px;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-10px); }
+  60% { transform: translateY(-5px); }
+}
+
+/* Section Styling */
+.section {
+  padding: 80px 0;
+  border-bottom: 1px solid rgba(16, 185, 129, 0.1);
+}
+
+.section:last-child {
+  border-bottom: none;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  background: linear-gradient(135deg, #10b981, #a855f7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 40px;
+  text-align: center;
+  position: relative;
+}
+
+.section-title::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 3px;
+  background: linear-gradient(90deg, #10b981, #a855f7);
+  border-radius: 2px;
+}
+
+/* About Section */
+.about-content {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 50px;
+  align-items: center;
+  margin-bottom: 50px;
+}
+
+.profile-card {
+  background: rgba(31, 41, 55, 0.8);
+  padding: 30px;
+  border-radius: 15px;
+  text-align: center;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 4px solid #10b981;
+  margin-bottom: 20px;
+  object-fit: cover;
+}
+
+.profile-info h3 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.location {
+  color: #9ca3af;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.badge {
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.badge-ambassador {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: #000;
+}
+
+.badge-level {
+  background: linear-gradient(135deg, #10b981, #a855f7);
+  color: #fff;
+}
+
+.about-text {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #e5e7eb;
+}
+
+.about-text p {
+  margin-bottom: 20px;
+}
+
+.highlight {
+  background: linear-gradient(135deg, #10b981, #a855f7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 600;
+}
+
+/* Stats Section */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 30px;
+  margin: 50px 0;
+}
+
+.stat-card {
+  background: rgba(31, 41, 55, 0.6);
+  padding: 30px;
+  border-radius: 15px;
+  text-align: center;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  border-color: #10b981;
+  box-shadow: 0 10px 25px rgba(16, 185, 129, 0.2);
+}
+
+.stat-number {
+  font-size: 2.5rem;
+  font-weight: bold;
+  background: linear-gradient(135deg, #10b981, #a855f7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 10px;
+}
+
+.stat-label {
+  color: #9ca3af;
+  font-size: 1rem;
+}
+
+/* Skills Section */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 40px;
+}
+
+.skill-category {
+  background: rgba(31, 41, 55, 0.6);
+  padding: 30px;
+  border-radius: 15px;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.skill-category h4 {
+  background: linear-gradient(135deg, #10b981, #a855f7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 1.3rem;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.skill-tag {
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: transform 0.3s ease;
+}
+
+.skill-tag:hover {
+  transform: scale(1.05);
+}
+
+.skill-frontend {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #fff;
+}
+.skill-backend {
+  background: linear-gradient(135deg, #a855f7, #9333ea);
+  color: #fff;
+}
+.skill-database {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  color: #fff;
+}
+.skill-tools {
+  background: linear-gradient(135deg, #10b981, #a855f7);
+  color: #fff;
+}
+
+/* Experience Section */
+.experience-timeline {
+  position: relative;
+  padding-left: 30px;
+}
+
+.experience-timeline::before {
+  content: "";
+  position: absolute;
+  left: 15px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg, #10b981, #a855f7);
+}
+
+.experience-item {
+  position: relative;
+  margin-bottom: 50px;
+  background: rgba(31, 41, 55, 0.6);
+  padding: 30px;
+  border-radius: 15px;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  margin-left: 30px;
+}
+
+.experience-item::before {
+  content: "";
+  position: absolute;
+  left: -45px;
+  top: 30px;
+  width: 12px;
+  height: 12px;
+  background: #10b981;
+  border-radius: 50%;
+  border: 3px solid #000;
+}
+
+.experience-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.experience-title {
+  font-size: 1.3rem;
+  color: #fff;
+  font-weight: 600;
+}
+
+.experience-company {
+  color: #10b981;
+  font-weight: 500;
+}
+
+.experience-period {
+  background: linear-gradient(135deg, #374151, #4b5563);
+  color: #10b981;
+  padding: 5px 15px;
+  border-radius: 15px;
+  font-size: 0.9rem;
+}
+
+.experience-description {
+  color: #e5e7eb;
+  line-height: 1.6;
+}
+
+/* Projects Section */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 30px;
+}
+
+.project-card {
+  background: rgba(31, 41, 55, 0.6);
+  border-radius: 15px;
+  overflow: hidden;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-5px);
+  border-color: #10b981;
+  box-shadow: 0 10px 25px rgba(16, 185, 129, 0.2);
+}
+
+.project-image {
+  width: 100%;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.project-image.ecommerce {
+  background: linear-gradient(135deg, #10b981, #a855f7);
+}
+
+.project-image.analytics {
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+}
+
+.project-image.gaming {
+  background: linear-gradient(135deg, #f59e0b, #ef4444);
+}
+
+.project-icon {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  opacity: 0.9;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.project-card:hover .project-icon {
+  transform: scale(1.1);
+  opacity: 1;
+}
+
+.project-content {
+  padding: 25px;
+}
+
+.project-title {
+  font-size: 1.3rem;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.project-description {
+  color: #9ca3af;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.project-tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.tech-tag {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+}
+
+.project-links {
+  display: flex;
+  gap: 15px;
+}
+
+.project-link {
+  color: #10b981;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.project-link:hover {
+  color: #a855f7;
+}
+
+/* Contact Section */
+.contact-content {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.contact-text {
+  font-size: 1.2rem;
+  color: #e5e7eb;
+  margin-bottom: 40px;
+  line-height: 1.6;
+}
+
+.contact-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 15px 30px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: 2px solid;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #10b981, #a855f7);
+  color: #fff;
+  border-color: transparent;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+}
+
+.btn-outline {
+  background: transparent;
+  color: #10b981;
+  border-color: #10b981;
+}
+
+.btn-outline:hover {
+  background: linear-gradient(135deg, #10b981, #a855f7);
+  color: #fff;
+  border-color: transparent;
+  transform: translateY(-2px);
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 40px 0;
+  border-top: 1px solid rgba(16, 185, 129, 0.2);
+  color: #9ca3af;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .navbar {
+    top: 15px;
+    left: 20px;
+    right: 20px;
+    transform: none;
+    padding: 10px 15px;
+  }
+
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: rgba(17, 24, 39, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 15px;
+    margin-top: 10px;
+    padding: 15px;
+    flex-direction: column;
+    gap: 5px;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+  }
+
+  .nav-links.active {
+    display: flex;
+  }
+
+  .nav-toggle {
+    display: block;
+  }
+
+  .control-panels {
+    top: 15px;
+    right: 15px;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .music-button, .video-button {
+    padding: 10px 15px;
+    font-size: 12px;
+    min-width: 80px;
+  }
+
+  .music-panel, .video-panel {
+    min-width: 250px;
+    right: -100px;
+  }
+
+  .typing-text {
+    font-size: 2.5rem;
+  }
+
+  .subtitle {
+    font-size: 1.2rem;
+  }
+
+  .about-content {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .experience-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .contact-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .content-container {
+    margin: 100px auto 30px;
+    padding: 20px;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #10b981, #a855f7);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #059669, #9333ea);
+}
+</style>
+</head>
+<body>
+<!-- Background Video -->
+<div class="video-background">
+    <video id="backgroundVideo" autoplay muted loop playsinline preload="auto">
+        <source src="content/vid.mp4" type="video/mp4">
+        Your browser does not support HTML5 video.
+    </video>
+</div>
+<div class="video-overlay"></div>
+
+<!-- Floating Navigation -->
+<nav class="navbar">
+    <div class="nav-content">
+       
+        <button class="nav-toggle" id="navToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#home" class="nav-link">Home</a></li>
+            <li><a href="#about" class="nav-link">About</a></li>
+            <li><a href="#experience" class="nav-link">Experience</a></li>
+            <li><a href="#projects" class="nav-link">Projects</a></li>
+            <li><a href="#skills" class="nav-link">Skills</a></li>
+            <li><a href="#contact" class="nav-link">Contact</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Control Panels -->
+<div class="control-panels">
+    <!-- Music Player Dropdown -->
+    <div class="music-dropdown">
+        <button class="music-button" id="musicToggle">
+            🎵 Music
+        </button>
+        <div class="music-panel" id="musicPanel">
+            <div class="music-header">
+                🎵 Background Music
+            </div>
+            <div class="music-options">
+                <div class="music-option" data-track="ambient">
+                    <input type="radio" name="music" id="ambient" value="ambient">
+                    <label for="ambient">🌌 Ambient Chill</label>
+                </div>
+                <div class="music-option" data-track="lofi">
+                    <input type="radio" name="music" id="lofi" value="lofi">
+                    <label for="lofi">🎧 Lo-Fi Beats</label>
+                </div>
+                <div class="music-option" data-track="synthwave">
+                    <input type="radio" name="music" id="synthwave" value="synthwave">
+                    <label for="synthwave">🌆 Synthwave</label>
+                </div>
+                <div class="music-option active" data-track="none">
+                    <input type="radio" name="music" id="none" value="none" checked>
+                    <label for="none">🔇 No Music</label>
+                </div>
+            </div>
+            <div class="volume-control">
+                <div class="volume-label">Volume</div>
+                <input type="range" class="volume-slider" min="0" max="100" value="20" id="volumeSlider">
+            </div>
+        </div>
+    </div>
+
+    <!-- Video Selector Dropdown -->
+    <div class="video-dropdown">
+        <button class="video-button" id="videoToggle">
+            🎬 Video
+        </button>
+        <div class="video-panel" id="videoPanel">
+            <div class="video-header">
+                🎬 Background Video
+            </div>
+            <div class="video-options">
+                <div class="video-option active" data-video="default">
+                    <input type="radio" name="video" id="default-video" value="default" checked>
+                    <label for="default-video">Cyberpunk 2077</label>
+                </div>
+                <div class="video-option" data-video="nature">
+                    <input type="radio" name="video" id="nature-video" value="nature">
+                    <label for="nature-video">Neon Genesis Evangelion</label>
+                </div>
+                <div class="video-option" data-video="abstract">
+                    <input type="radio" name="video" id="abstract-video" value="abstract">
+                    <label for="abstract-video">Berserk</label>
+                </div>
+                <div class="video-option" data-video="tech">
+                    <input type="radio" name="video" id="tech-video" value="tech">
+                    <label for="tech-video">Tensei Slime </label>
+                </div>
+            </div>
+            <div class="video-controls">
+                <div class="opacity-label">Opacity</div>
+                <input type="range" class="opacity-slider" min="10" max="100" value="60" id="opacitySlider">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Audio Elements -->
+<audio id="ambientAudio" loop preload="auto">
+    <source src="content/ch.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="lofiAudio" loop preload="auto">
+    <source src="content/yd.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="synthwaveAudio" loop preload="auto">
+    <source src="content/yh.mp3" type="audio/mpeg">
+</audio>
+
+<!-- Main Container -->
+<div class="main-container">
+    <!-- Home Section Content Container -->
+    <div class="content-container home-content">
+        <section id="home" class="home-section">
+            <h1 class="typing-text">
+                <span id="typed-text"></span><span class="cursor">|</span>
+            </h1>
+            <p class="subtitle">Full Stack Developer & Creative Problem Solver</p>
+            <div class="scroll-indicator">
+                <div style="font-size: 2rem; color: #10b981;">↓</div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Other Sections Content Container -->
+    <div class="content-container other-content">
+        <!-- About Section -->
+        <section id="about" class="section">
+            <h2 class="section-title">About Me</h2>
+            <div class="about-content">
+                <div class="profile-card">
+                    <img src="content/me.png" alt="Aaron" class="avatar">
+                    <div class="profile-info">
+                        <h3>Muhammad Danish</h3>
+                        <div class="location">
+                            📍 Sabah | Malaysia
+                        </div>
+                        <div class="badges">
+                            <span class="badge badge-ambassador">🏆 B032410964</span>
+                            <span class="badge badge-level">UTeM Melaka</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-text">
+                    <p>
+                        Hey there! I'm <span class="highlight">Muhammad Danish Arrian</span>, but most people know me as <span class="highlight">Aaron</span>. 
+                        I was born at Sabah and currently studying here at <span class="highlight">UTeM</span> Melaka for my degree.
+                    </p>
+                    <p>
+                        With over <span class="highlight">3+ years</span> of working experience im confident in my ability and say that im a hardworking and passionate.
+                        I've taken a <span class="highlight">Diploma</span> in Electrical Engineering and i would like to expand my knowledge and skill set. 
+                        Now here in <span class="highlight">UTeM</span> i've now learn to code. My journey started with a simple "Hello World" and has evolved into architecting complex systems in all types of languages.
+                    </p>
+                  
+                </div>
+            </div>
+
+            <!-- Stats Section -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">20+</div>
+                    <div class="stat-label">Projects Completed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">3+</div>
+                    <div class="stat-label">Years Experience</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">35+</div>
+                    <div class="stat-label">Certificate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">15+</div>
+                    <div class="stat-label">Technologies Mastered</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section id="experience" class="section">
+            <h2 class="section-title">My Journey</h2>
+            <div class="experience-timeline">
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <div>
+                            <div class="experience-title">Degree</div>
+                            <div class="experience-company">UTeM Melaka</div>
+                        </div>
+                        <div class="experience-period">2024 - Present</div>
+                    </div>
+                    <div class="experience-description">
+                        I’m a student from Sabah currently pursuing a Bachelor of Computer Science (Computer Networking) at Universiti Teknikal Malaysia Melaka (UTeM). Studying in Melaka has been a huge step outside my comfort zone—far from home, but full of new experiences. My course focuses on IT and communication technologies, where I’ve been learning everything from networking fundamentals to hands-on labs involving real-world systems. It's a challenging but rewarding journey, and being in Melaka has helped me grow both academically and personally, as I adapt to life away from Sabah and build my future in the tech world.
+                    </div>
+                </div>
+
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <div>
+                            <div class="experience-title">Diploma</div>
+                            <div class="experience-company">Politeknik Kota Kinabalu Sabah</div>
+                        </div>
+                        <div class="experience-period">2019 - 2022</div>
+                    </div>
+                    <div class="experience-description">
+                        I’m a student from Sabah, currently pursuing a Diploma in Electrical Engineering (Communication) at Politeknik Kota Kinabalu. This course has deepened my understanding of electrical systems, signal processing, and communication technology—preparing me for a future in the engineering and tech field. Studying in my home state has allowed me to stay close to my roots while gaining hands-on experience and practical skills that are crucial in today’s fast-evolving digital world.
+                    </div>
+                </div>
+
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <div>
+                            <div class="experience-title">SPM</div>
+                            <div class="experience-company">Sm Shan Tao Likas</div>
+                        </div>
+                        <div class="experience-period">2014 - 2018</div>
+                    </div>
+                    <div class="experience-description">
+                        I completed my SPM at SM Shan Tao in Kota Kinabalu, Sabah, where I focused on Perniagaan (Business) and Ekonomi. During my time there, I developed a strong interest in how businesses operate and how economic systems affect everyday life. These subjects helped shape my analytical thinking and sparked my passion for understanding systems—something that later guided me toward the technical field I’m in now. Studying at Shan Tao gave me a solid academic foundation and taught me valuable discipline and responsibility.
+                    </div>
+                </div>
+
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <div>
+                            <div class="experience-title">Part Time</div>
+                            <div class="experience-company">Working Experience</div>
+                        </div>
+                        <div class="experience-period">...</div>
+                    </div>
+                    <div class="experience-description">
+                        I’ve had diverse working experiences that helped me build strong discipline, communication, and hands-on technical skills. I started as an office boy at Shell, where I handled basic clerical tasks and supported day-to-day office operations. I then worked as a customer service staff at Sutera Harbour, which taught me how to handle guests professionally and resolve issues with patience and efficiency. I also gained experience as a waiter, learning teamwork and time management in a fast-paced environment. Most notably, I took on a leadership role as head of a wiring team, where I was responsible for managing electrical installation tasks and ensuring safety and quality on-site. These roles have shaped my work ethic and strengthened my adaptability across different industries.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="section">
+            <h2 class="section-title">Featured Projects</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-image ecommerce">
+                        
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">Asset Management System</h3>
+                        <p class="project-description">
+                            This Asset Management System is a web-based application designed to help organizations efficiently track, manage, and maintain their physical and digital assets. Built using HTML and CSS for the front-end interface, the system provides a clean and responsive user experience. JavaScript is used to enhance interactivity, including live search, form validation, and dynamic filtering.
+
+The back-end is developed in PHP, with a MySQL database for storing asset details such as item name, category, location, status, purchase date, and assigned personnel.
+                        </p>
+                        <div class="project-tech">
+                            <span class="tech-tag">HTML</span>
+                            <span class="tech-tag">CSS</span>
+                            <span class="tech-tag">PHP</span>
+                            <span class="tech-tag">MySQL</span>
+                            <span class="tech-tag">JavaScript</span>
+                        </div>
+                        <div class="project-links">
+                         
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-image analytics">
+                        
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">Discover Malaysia Interactive App</h3>
+                        <p class="project-description">
+                            Discover Malaysia is an interactive desktop application developed as a standalone .exe file using Adobe tools. The app is designed to educate and promote Malaysia’s rich culture, history, tourist attractions, food, and traditions in an engaging, visual format.
+
+The user interface is built with Adobe Animate (formerly Flash) and exported as a Windows application using Adobe AIR. The design elements were created using Adobe Illustrator and Photoshop, ensuring a visually polished experience.
+                        </p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Adobe Animate</span>
+                            <span class="tech-tag">Adobe XD</span>
+                            <span class="tech-tag">Adobe AIR</span>
+                            <span class="tech-tag">Photoshop</span>
+                            <span class="tech-tag">Illustrator</span>
+                        </div>
+                        <div class="project-links">
+                     
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-image gaming">
+                       
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">Automatic Temperature-Controlled Fan using Arduino</h3>
+                        <p class="project-description">
+                            This project involves designing and building an automatic fan system that activates and adjusts based on surrounding temperature using an Arduino UNO microcontroller. The fan turns on when the temperature exceeds a certain threshold, helping automate cooling processes for small rooms or enclosures.
+                        </p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Arduino UNO</span>
+                            <span class="tech-tag">DHT11 Temperature Sensor</span>
+                            <span class="tech-tag">Relay Module</span>
+                            <span class="tech-tag">PCB</span>
+                        </div>
+                        <div class="project-links">
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="section">
+            <h2 class="section-title">Technical Arsenal</h2>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h4>Frontend Development</h4>
+                    <div class="skill-tags">
+                        <span class="skill-tag skill-frontend">HTML</span>
+                        <span class="skill-tag skill-frontend">CSS</span>
+                        <span class="skill-tag skill-frontend">JavaScript</span>
+                        <span class="skill-tag skill-frontend">Adobe Animate</span>
+                        
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h4>Backend Development</h4>
+                    <div class="skill-tags">
+                        <span class="skill-tag skill-backend">PHP</span>
+                        <span class="skill-tag skill-backend">Express.js</span>
+                        <span class="skill-tag skill-backend">Python</span>
+                        <span class="skill-tag skill-backend">SQL</span>
+                        <span class="skill-tag skill-backend">GraphQL</span>
+                        <span class="skill-tag skill-backend">REST APIs</span>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h4>Embedded Systems / Hardware</h4>
+                    <div class="skill-tags">
+                        <span class="skill-tag skill-database">Arduino (C/C++)</span>
+                        <span class="skill-tag skill-database">Breadboard prototyping</span>
+                        <span class="skill-tag skill-database">Wiring system setups</span>
+                        <span class="skill-tag skill-database">Circuit design & electrical troubleshooting</span>
+                      
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h4>Tools & Others</h4>
+                    <div class="skill-tags">
+                        <span class="skill-tag skill-tools">Git</span>
+                        <span class="skill-tag skill-tools">Jest</span>
+                        <span class="skill-tag skill-tools">Webpack</span>
+                        <span class="skill-tag skill-tools">Figma</span>
+                        <span class="skill-tag skill-tools">Wiring</span>
+                        <span class="skill-tag skill-tools">CI/CD</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="section">
+          <h2 class="section-title">Let's Build Something Amazing</h2>
+    <div class="contact-content">
+        <p class="contact-text">
+            Ready to turn your ideas into reality? I'm always excited to work on innovative projects 
+            and collaborate with fellow creators. Whether you need a complete web application, 
+            want to optimize your existing system, or just want to chat about tech, I'd love to hear from you!
+        </p>
+        <ul class="contact-info">
+            <strong>Email:</strong> <a href="mailto:muhddanish832@gmail.com">muhddanish832@gmail.com</a><br>
+            <strong>Phone/WhatsApp:</strong> <a href="tel:+601131612883">+60 11-3161 2883</a><br>
+            <strong>Steam:</strong> <a href="https://steamcommunity.com/id/383123429/" target="_blank">steamcommunity.com/id/383123429</a></li>
+        </ul>
+    </div>
+        </section>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="main-container">
+        <p>&copy; 2025 Muhammad Danish Portfolio. </p>
+    </div>
+</footer>
+
+<script>
+    // Typing Animation with Loop
+    const texts = [
+        "Welcome to My Digital Universe",
+        "Full Stack Developer",
+        "Creative Problem Solver",
+        "Code Architect"
+    ];
+    let currentTextIndex = 0;
+    let currentCharIndex = 0;
+    let isDeleting = false;
+    const typedTextElement = document.getElementById('typed-text');
+
+    function typeText() {
+        const currentText = texts[currentTextIndex];
+        
+        if (isDeleting) {
+            typedTextElement.textContent = currentText.substring(0, currentCharIndex - 1);
+            currentCharIndex--;
+            
+            if (currentCharIndex === 0) {
+                isDeleting = false;
+                currentTextIndex = (currentTextIndex + 1) % texts.length;
+                setTimeout(typeText, 500);
+            } else {
+                setTimeout(typeText, 50);
+            }
+        } else {
+            typedTextElement.textContent = currentText.substring(0, currentCharIndex + 1);
+            currentCharIndex++;
+            
+            if (currentCharIndex === currentText.length) {
+                isDeleting = true;
+                setTimeout(typeText, 2000);
+            } else {
+                setTimeout(typeText, 100);
+            }
+        }
+    }
+
+    // Start typing animation when page loads
+    window.addEventListener('load', () => {
+        setTimeout(typeText, 1000);
+    });
+
+    // Mobile Navigation Toggle
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+
+    navToggle.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+    });
+
+    // Navbar Active Section Highlighting
+    const sections = document.querySelectorAll('.section, .home-section');
+    const navLinksElements = document.querySelectorAll('.nav-link');
+
+    function updateActiveNavLink() {
+        let current = '';
+        
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.clientHeight;
+            if (window.pageYOffset >= sectionTop - 200) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        navLinksElements.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === `#${current}`) {
+                link.classList.add('active');
+            }
+        });
+    }
+
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+                // Close mobile menu if open
+                navLinks.classList.remove('active');
+            }
+        });
+    });
+
+    // Music Player Dropdown Functionality
+    const musicToggle = document.getElementById('musicToggle');
+    const musicPanel = document.getElementById('musicPanel');
+    const musicOptions = document.querySelectorAll('.music-option');
+    const volumeSlider = document.getElementById('volumeSlider');
+    let currentAudio = null;
+    let currentAudioElement = null;
+
+    // Video Selector Elements
+    const videoToggle = document.getElementById('videoToggle');
+    const videoPanel = document.getElementById('videoPanel');
+    const videoOptions = document.querySelectorAll('.video-option');
+    const opacitySlider = document.getElementById('opacitySlider');
+    const backgroundVideo = document.getElementById('backgroundVideo');
+    
+    // Video paths - replace these with your actual video paths
+    const videoPaths = {
+        default: 'content/vid.mp4',
+        nature: 'content/nge.mp4',
+        abstract: 'content/b.mp4',
+        tech: 'content/tsdk.mp4'
+    };
+
+    // Toggle music panel
+    musicToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        musicPanel.classList.toggle('active');
+        videoPanel.classList.remove('active');
+    });
+
+    // Toggle video panel
+    videoToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        videoPanel.classList.toggle('active');
+        musicPanel.classList.remove('active');
+    });
+
+    // Close panels when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!musicToggle.contains(e.target) && !musicPanel.contains(e.target)) {
+            musicPanel.classList.remove('active');
+        }
+        if (!videoToggle.contains(e.target) && !videoPanel.contains(e.target)) {
+            videoPanel.classList.remove('active');
+        }
+    });
+
+    // Prevent panels from closing when clicking inside
+    musicPanel.addEventListener('click', (e) => {
+        e.stopPropagation();
+    });
+
+    videoPanel.addEventListener('click', (e) => {
+        e.stopPropagation();
+    });
+
+    // Music player functionality
+    musicOptions.forEach(option => {
+        option.addEventListener('click', () => {
+            musicOptions.forEach(opt => opt.classList.remove('active'));
+            option.classList.add('active');
+            
+            const radio = option.querySelector('input[type="radio"]');
+            radio.checked = true;
+            
+            if (currentAudioElement) {
+                currentAudioElement.pause();
+                currentAudioElement.currentTime = 0;
+            }
+            
+            const track = option.dataset.track;
+            
+            if (track !== 'none') {
+                currentAudioElement = document.getElementById(track + 'Audio');
+                if (currentAudioElement) {
+                    currentAudioElement.volume = volumeSlider.value / 100;
+                    
+                    const playPromise = currentAudioElement.play();
+                    
+                    if (playPromise !== undefined) {
+                        playPromise.then(() => {
+                            console.log('Audio playing successfully');
+                        }).catch(error => {
+                            console.log('Audio play failed:', error);
+                        });
+                    }
+                }
+            } else {
+                currentAudioElement = null;
+            }
+        });
+    });
+
+    // Volume control
+    volumeSlider.addEventListener('input', (e) => {
+        const volume = e.target.value / 100;
+        if (currentAudioElement) {
+            currentAudioElement.volume = volume;
+        }
+    });
+
+    // Video selection functionality
+    videoOptions.forEach(option => {
+        option.addEventListener('click', () => {
+            videoOptions.forEach(opt => opt.classList.remove('active'));
+            option.classList.add('active');
+            
+            const radio = option.querySelector('input[type="radio"]');
+            radio.checked = true;
+            
+            const videoType = option.dataset.video;
+            const videoPath = videoPaths[videoType];
+            
+            if (videoPath) {
+                const currentTime = backgroundVideo.currentTime;
+                const wasPlaying = !backgroundVideo.paused;
+                
+                backgroundVideo.querySelector('source').src = videoPath;
+                backgroundVideo.load();
+                
+                backgroundVideo.addEventListener('loadedmetadata', () => {
+                    backgroundVideo.currentTime = currentTime;
+                    if (wasPlaying) {
+                        backgroundVideo.play();
+                    }
+                }, { once: true });
+            }
+        });
+    });
+
+    // Opacity control
+    opacitySlider.addEventListener('input', (e) => {
+        const opacity = e.target.value / 100;
+        backgroundVideo.style.opacity = opacity;
+    });
+
+    // Add scroll effect to navbar
+    window.addEventListener('scroll', () => {
+        updateActiveNavLink();
+    });
+
+    // Intersection Observer for animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.section').forEach(section => {
+        section.style.opacity = '0';
+        section.style.transform = 'translateY(30px)';
+        section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(section);
+    });
+
+    updateActiveNavLink();
+</script>
+</body>
+</html>
